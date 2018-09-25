@@ -1,0 +1,72 @@
+#define NMAXPRO 9
+#define QUANTUM 5
+#define FITA 100
+#define DISCO 150
+#define IMPRESSORA 200
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+  int data;
+  struct Node *next;
+};
+
+struct Queue {
+	struct Node *head;
+	struct Node *tail;
+	unsigned int size;
+};
+
+void init(struct Queue *q) {
+	q->head = NULL;
+	q->tail = NULL;
+	q->size = 0;
+}
+
+int head(struct Queue *q) {
+	return q->head->data;
+}
+
+void deq(struct Queue *q) {
+	q->size--;
+
+	struct Node *tmp = q->head;
+	q->head = q->head->next;
+	free(tmp);
+}
+
+void enq(struct Queue *q, int data) {
+	q->size++;
+
+	if (q->head == NULL) {
+		q->head = (struct Node *) malloc(sizeof(struct Node));
+		q->head->data = data;
+		q->head->next = NULL;
+		q->tail = q->head;
+	} else {
+		q->tail->next = (struct Node *) malloc(sizeof(struct Node));
+		q->tail->next->data = data;
+		q->tail->next->next = NULL;
+		q->tail = q->tail->next;
+	}
+}
+
+int main(void) {
+	struct Queue newPro;
+	struct Queue filaIO;
+	struct Queue altaPri;
+	struct Queue baixaPri;
+	init(&newPro);
+	init(&filaIO);
+	init(&altaPri);
+	init(&baixaPri);
+  for(int i = 0; i <= NMAXPRO ; i++){
+      enq(&newPro, i);
+  }
+  for(int i = 0; i <= NMAXPRO ; i++){
+	printf("Processo: %d\n", head(&newPro));
+	deq(&newPro);
+  }
+return 0;
+}
